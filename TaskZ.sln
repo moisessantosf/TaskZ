@@ -5,23 +5,25 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{80179AFF-9E4A-4D86-97FF-4078B8C50805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskZ.API", "src\TaskZ.API\TaskZ.API.csproj", "{17E72981-7502-45BF-A1D0-7EA5B138D238}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskZ.API", "src\TaskZ.API\TaskZ.API.csproj", "{17E72981-7502-45BF-A1D0-7EA5B138D238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskZ.Core", "src\TaskZ.Core\TaskZ.Core.csproj", "{65B4689F-3A96-465E-9C21-B515F589C3F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskZ.Core", "src\TaskZ.Core\TaskZ.Core.csproj", "{65B4689F-3A96-465E-9C21-B515F589C3F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskZ.Infrastructure", "src\TaskZ.Infrastructure\TaskZ.Infrastructure.csproj", "{21280621-3D2B-4C51-B5F9-6359A6D1A576}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskZ.Infrastructure", "src\TaskZ.Infrastructure\TaskZ.Infrastructure.csproj", "{21280621-3D2B-4C51-B5F9-6359A6D1A576}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{89EB5156-9FF6-42CC-8D53-D6950BF2DA88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskZ.Tests", "tests\TaskZ.Tests\TaskZ.Tests.csproj", "{CD4C103A-7E3A-41D3-AC46-484EE33F041F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskZ.Tests", "tests\TaskZ.Tests\TaskZ.Tests.csproj", "{CD4C103A-7E3A-41D3-AC46-484EE33F041F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1E1448EA-F8DA-4A47-BE27-E6D4CEEE7805}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{17E72981-7502-45BF-A1D0-7EA5B138D238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -41,10 +43,16 @@ Global
 		{CD4C103A-7E3A-41D3-AC46-484EE33F041F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD4C103A-7E3A-41D3-AC46-484EE33F041F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{17E72981-7502-45BF-A1D0-7EA5B138D238} = {80179AFF-9E4A-4D86-97FF-4078B8C50805}
 		{65B4689F-3A96-465E-9C21-B515F589C3F6} = {80179AFF-9E4A-4D86-97FF-4078B8C50805}
 		{21280621-3D2B-4C51-B5F9-6359A6D1A576} = {80179AFF-9E4A-4D86-97FF-4078B8C50805}
 		{CD4C103A-7E3A-41D3-AC46-484EE33F041F} = {89EB5156-9FF6-42CC-8D53-D6950BF2DA88}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F018A76F-DD41-4E31-87DE-20FCDE07C5CE}
 	EndGlobalSection
 EndGlobal
