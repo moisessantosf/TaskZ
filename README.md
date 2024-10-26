@@ -37,6 +37,7 @@ Para executar o projeto, siga os passos abaixo:
    * Existe interesse em adicionar suporte a tarefas recorrentes?
    * O status hoje é pré definido, no futuro poderá ser permitido cadastrar novos status?
    * A prioridade hoje é pré definida, no futuro poderá ser permitido cadastrar novas prioridades?
+   * Quando um projeto é deletado, hoje todos os itens são deletados juntos (também conhecido como "delete cascade"), não seria interessante implementar um "soft delete" (onde o item é apenas marcado como deletado, não é mais apresentado em relatórios (e em diversas outras regras que podem ser implementadas a partir disto)?
 
 ## Fase 3: Possíveis Melhorias e Sugestões Futuras
 
