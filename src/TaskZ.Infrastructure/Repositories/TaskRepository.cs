@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TaskZ.Core.Entities;
 using TaskZ.Core.Interfaces;
 using TaskZ.Infrastructure.Data;
+using Task = System.Threading.Tasks.Task;
 
 namespace TaskZ.Infrastructure.Repositories
 {
@@ -40,33 +42,41 @@ namespace TaskZ.Infrastructure.Repositories
         public async Task UpdateAsync(Core.Entities.Task task)
         {
 
-            // Verifica se a entidade já está sendo rastreada
             var entry = _context.Entry(task);
 
             if (entry.State == EntityState.Detached)
             {
-                // Se não estiver sendo rastreada, anexa ao contexto
                 _context.Tasks.Attach(task);
             }
 
-            // Marca a entidade como modificada
             entry.State = EntityState.Modified;
 
-            // Marca as coleções como modificadas
-            foreach (var history in task.History)
+            var existingHistoryIds = await _context.Set<TaskHistory>()
+                .Where(h => h.TaskId == task.Id)
+                .Select(h => h.Id)
+                .ToListAsync();
+
+            var newHistories = task.History
+                .Where(h => !existingHistoryIds.Contains(h.Id))
+                .ToList();
+
+            foreach (var history in newHistories)
             {
-                if (_context.Entry(history).State != EntityState.Unchanged)
-                {
-                    _context.Entry(history).State = EntityState.Added;
-                }
+                _context.Entry(history).State = EntityState.Added;
             }
 
-            foreach (var comment in task.Comments)
+            var existingCommentsIds = await _context.Set<Comment>()
+                .Where(h => h.TaskId == task.Id)
+                .Select(h => h.Id)
+                .ToListAsync();
+
+            var newComments = task.Comments
+                .Where(h => !existingCommentsIds.Contains(h.Id))
+                .ToList();
+
+            foreach (var comment in newComments)
             {
-                if (_context.Entry(comment).State != EntityState.Unchanged)
-                {
-                    _context.Entry(comment).State = EntityState.Added;
-                }
+                _context.Entry(comment).State = EntityState.Added;
             }
 
             await _context.SaveChangesAsync();

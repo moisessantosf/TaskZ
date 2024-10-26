@@ -122,8 +122,8 @@ namespace TaskZ.Tests
 
             using (var context = new ApplicationDbContext(options))
             {
-                context.Tasks.Add(task);
-                await context.SaveChangesAsync();
+                var repository = new TaskRepository(context);
+                await repository.CreateAsync(task);
             }
 
             // Act
@@ -143,7 +143,14 @@ namespace TaskZ.Tests
 
                 updatedTask.Should().NotBeNull();
                 updatedTask.Status.Should().Be(Core.Enums.TaskStatus.InProgress);
-                updatedTask.History.Should().HaveCount(2);
+
+                // Verificações adicionais para debug
+                updatedTask.History.Should().NotBeNull();
+                updatedTask.History.Should().HaveCount(2, because: "Should have 'Task created' and 'Status changed' entries");
+
+                // Verificar o conteúdo do histórico
+                updatedTask.History.Should().Contain(h => h.Description == "Task created");
+                updatedTask.History.Should().Contain(h => h.Description.Contains("Status changed"));
             }
         }
     }
