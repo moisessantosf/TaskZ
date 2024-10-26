@@ -144,11 +144,9 @@ namespace TaskZ.Tests
                 updatedTask.Should().NotBeNull();
                 updatedTask.Status.Should().Be(Core.Enums.TaskStatus.InProgress);
 
-                // Verificações adicionais para debug
                 updatedTask.History.Should().NotBeNull();
                 updatedTask.History.Should().HaveCount(2, because: "Should have 'Task created' and 'Status changed' entries");
 
-                // Verificar o conteúdo do histórico
                 updatedTask.History.Should().Contain(h => h.Description == "Task created");
                 updatedTask.History.Should().Contain(h => h.Description.Contains("Status changed"));
             }
@@ -192,34 +190,6 @@ namespace TaskZ.Tests
             result.Should().BeOfType<NoContentResult>();
             _mockTaskRepo.Verify(r => r.UpdateAsync(task), Times.Once);
         }
-
-        //[Fact]
-        //public async Task Create_WithValidRequest_ShouldReturnCreatedTask()
-        //{
-        //    // Arrange
-        //    var projectId = Guid.NewGuid();
-        //    var request = new CreateTaskRequest
-        //    {
-        //        Title = "Test Task",
-        //        Description = "Test Description",
-        //        DueDate = DateTime.UtcNow.AddDays(1),
-        //        Priority = TaskPriority.High,
-        //        ProjectId = projectId
-        //    };
-
-        //    var project = new Project(); // Você precisa implementar esta classe
-        //    _mockProjectRepo.Setup(r => r.GetByIdAsync(projectId))
-        //        .ReturnsAsync(project);
-
-        //    // Act
-        //    var result = await _controller.Create(request);
-
-        //    // Assert
-        //    var createdResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
-        //    var taskResponse = createdResult.Value.Should().BeOfType<TaskResponse>().Subject;
-        //    taskResponse.Title.Should().Be(request.Title);
-        //    taskResponse.ProjectId.Should().Be(projectId);
-        //}
 
         [Fact]
         public async Task AddComment_WithValidRequest_ShouldReturnComment()
