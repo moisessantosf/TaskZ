@@ -11,7 +11,7 @@ using TaskZ.API.Models.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TaskZ.API.Controllers;
 
-namespace TaskZ.Tests
+namespace TaskZ.Tests.Tasks
 {
     public class TaskEntityTests
     {

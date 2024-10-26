@@ -10,7 +10,6 @@ namespace TaskZ.Infrastructure.Data
         public DbSet<Task> Tasks { get; set; }
         public DbSet<TaskHistory> TaskHistories { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<User> Users { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
