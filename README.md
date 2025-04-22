@@ -54,7 +54,20 @@ Você deve possuir o Docker Desktop (Windows) ou similar rodando em seu sistema 
    - Adicionar suporte para filas de mensagens, como RabbitMQ, Kafka ou Azure Service Bus, para tratar eventos que exigem reprocessamento ou execução assíncrona.
    - Adicionar observalidade para monitorar e analisar a telemetria do sistema, para isto poderia ser usado o OpenTelemetry, DataDog ou outra ferramenta.
 
-## Diagrama do Bando de Dados:
+## Diagrama do Banco de Dados:
 ![image](https://github.com/user-attachments/assets/e69a843f-f223-42a2-beee-99b0a2d6becf)
 
+## Cobertura de Testes:
+![image](https://github.com/user-attachments/assets/24ae246a-0822-461d-828e-5b058d1afeb1)
 
+Para verificação, poderá ser executado os comandos abaixo:
+
+```bash
+dotnet test --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.ExcludeByFile="**/Program.cs"
+```
+
+```bash
+reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:Html -classfilters:"-TaskZ.Infrastructure.Migrations*"
+```
+
+O relatório pdoerá ser visualizado o index.html que econtra-se dentro da pasta TaskZ\coverage-report\ .
