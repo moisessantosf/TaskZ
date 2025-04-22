@@ -1,18 +1,16 @@
-﻿using Moq;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using TaskZ.Core.Entities;
-using TaskZ.Core.Interfaces;
-using TaskZ.Core.Enums;
-using TaskZ.Infrastructure.Repositories;
-using TaskZ.Infrastructure.Data;
-using Task = System.Threading.Tasks.Task;
-using TaskZ.API.Models.Tasks;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 using TaskZ.API.Controllers;
 using TaskZ.API.Models.Reports;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Security.Principal;
+using TaskZ.API.Models.Tasks;
+using TaskZ.Core.Entities;
+using TaskZ.Core.Enums;
+using TaskZ.Core.Interfaces;
+using TaskZ.Infrastructure.Data;
+using TaskZ.Infrastructure.Repositories;
+using Task = System.Threading.Tasks.Task;
 
 namespace TaskZ.Tests.Tasks
 {

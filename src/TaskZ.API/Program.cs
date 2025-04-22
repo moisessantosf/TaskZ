@@ -1,7 +1,9 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Polly;
+using TaskZ.Core.Interfaces;
 using TaskZ.Infrastructure.Data;
 using TaskZ.Infrastructure.Repositories;
-using TaskZ.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,12 +32,19 @@ if (app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    context.Database.Migrate();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    var policy = Policy
+        .Handle<SqlException>()
+        .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(5));
+
+    policy.Execute(() =>
+    {
+        db.Database.Migrate();
+    });
 }
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+await app.RunAsync();

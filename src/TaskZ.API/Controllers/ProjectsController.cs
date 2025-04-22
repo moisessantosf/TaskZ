@@ -10,12 +10,10 @@ namespace TaskZ.API.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly ITaskRepository _taskRepository;
 
-        public ProjectsController(IProjectRepository projectRepository, ITaskRepository taskRepository)
+        public ProjectsController(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
-            _taskRepository = taskRepository;
         }
 
         [HttpGet("user/{userId}")]

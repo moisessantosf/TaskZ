@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TaskZ.Core.Interfaces;
-using TaskZ.Core.Entities;
 using TaskZ.API.Models.Reports;
 using TaskZ.API.Models.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
+using TaskZ.Core.Interfaces;
 
 namespace TaskZ.API.Controllers
 {
