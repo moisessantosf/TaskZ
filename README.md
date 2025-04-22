@@ -4,6 +4,9 @@
 
 Para executar o projeto, siga os passos abaixo:
 
+** Importante **
+Você deve possuir o Docker Desktop (Windows) ou similar rodando em seu sistema operacional.
+
 1. Clone o repositório:
    ```bash
    git clone https://github.com/moisessantosf/TaskZ.git
@@ -50,4 +53,8 @@ Para executar o projeto, siga os passos abaixo:
    - Implementar um sistema de cache distribuído como Redis para acelerar respostas a consultas frequentes.
    - Adicionar suporte para filas de mensagens, como RabbitMQ, Kafka ou Azure Service Bus, para tratar eventos que exigem reprocessamento ou execução assíncrona.
    - Adicionar observalidade para monitorar e analisar a telemetria do sistema, para isto poderia ser usado o OpenTelemetry, DataDog ou outra ferramenta.
+
+## Diagrama do Bando de Dados:
+![image](https://github.com/user-attachments/assets/e69a843f-f223-42a2-beee-99b0a2d6becf)
+
 
