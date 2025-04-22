@@ -100,7 +100,7 @@ namespace TaskZ.Tests.Tasks
         public void TaskResponse_FromTask_ShouldMapProperties()
         {
             // Arrange
-            var task = new Core.Entities.Task("Task Title", "Task Description", DateTime.UtcNow, Core.Enums.TaskPriority.Low, Guid.NewGuid());
+            var task = new Core.Entities.Task("Task Title", "Task Description", DateTime.UtcNow, TaskPriority.Low, Guid.NewGuid());
             
             task.Comments.Add(new Comment("Test Comment", Guid.NewGuid(), Guid.NewGuid()));
 
@@ -223,9 +223,9 @@ namespace TaskZ.Tests.Tasks
             using var context = new ApplicationDbContext(_dbContextOptions);
             var repository = new TaskRepository(context);
             var projectId = Guid.NewGuid();
-            context.Tasks.Add(new Core.Entities.Task("Task 1", "Description 1", DateTime.UtcNow.AddDays(1), Core.Enums.TaskPriority.Medium, projectId));
-            context.Tasks.Add(new Core.Entities.Task("Task 2", "Description 2", DateTime.UtcNow.AddDays(2), Core.Enums.TaskPriority.High, projectId));
-            context.Tasks.Add(new Core.Entities.Task("Task 3", "Description 3", DateTime.UtcNow.AddDays(3), Core.Enums.TaskPriority.Low, Guid.NewGuid()));
+            context.Tasks.Add(new Core.Entities.Task("Task 1", "Description 1", DateTime.UtcNow.AddDays(1), TaskPriority.Medium, projectId));
+            context.Tasks.Add(new Core.Entities.Task("Task 2", "Description 2", DateTime.UtcNow.AddDays(2), TaskPriority.High, projectId));
+            context.Tasks.Add(new Core.Entities.Task("Task 3", "Description 3", DateTime.UtcNow.AddDays(3), TaskPriority.Low, Guid.NewGuid()));
             await context.SaveChangesAsync();
 
             // Act
@@ -242,7 +242,7 @@ namespace TaskZ.Tests.Tasks
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             var repository = new TaskRepository(context);
-            var task = new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(5), Core.Enums.TaskPriority.Medium, Guid.NewGuid());
+            var task = new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(5), TaskPriority.Medium, Guid.NewGuid());
             context.Tasks.Add(task);
             await context.SaveChangesAsync();
 
@@ -260,7 +260,7 @@ namespace TaskZ.Tests.Tasks
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             var repository = new TaskRepository(context);
-            var task = new Core.Entities.Task("New Task", "Description", DateTime.UtcNow.AddDays(5), Core.Enums.TaskPriority.High, Guid.NewGuid());
+            var task = new Core.Entities.Task("New Task", "Description", DateTime.UtcNow.AddDays(5), TaskPriority.High, Guid.NewGuid());
 
             // Act
             await repository.CreateAsync(task);
@@ -277,7 +277,7 @@ namespace TaskZ.Tests.Tasks
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             var repository = new TaskRepository(context);
-            var task = new Core.Entities.Task("Task to Update", "Description", DateTime.UtcNow.AddDays(5), Core.Enums.TaskPriority.Medium, Guid.NewGuid());
+            var task = new Core.Entities.Task("Task to Update", "Description", DateTime.UtcNow.AddDays(5), TaskPriority.Medium, Guid.NewGuid());
             context.Tasks.Add(task);
             await context.SaveChangesAsync();
 
@@ -297,7 +297,7 @@ namespace TaskZ.Tests.Tasks
             // Arrange
             using var context = new ApplicationDbContext(_dbContextOptions);
             var repository = new TaskRepository(context);
-            var task = new Core.Entities.Task("Task to Delete", "Description", DateTime.UtcNow.AddDays(5), Core.Enums.TaskPriority.Low, Guid.NewGuid());
+            var task = new Core.Entities.Task("Task to Delete", "Description", DateTime.UtcNow.AddDays(5), TaskPriority.Low, Guid.NewGuid());
             context.Tasks.Add(task);
             await context.SaveChangesAsync();
 
@@ -307,6 +307,58 @@ namespace TaskZ.Tests.Tasks
             // Assert
             var deletedTask = await context.Tasks.FindAsync(task.Id);
             deletedTask.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GetCompletedTasksCountInLastDaysAsync_ShouldReturnCorrectCount()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(_dbContextOptions);
+            var repository = new TaskRepository(context);
+            var userId = Guid.NewGuid();
+            var projectId = Guid.NewGuid();
+
+            var task = new Core.Entities.Task("Completed Task", "Desc", DateTime.UtcNow, TaskPriority.High, projectId);
+            task.UpdateStatus(Core.Enums.TaskStatus.Completed, userId);
+            task.History.Add(new TaskHistory("Completed Task", task.Id, userId));
+
+            context.Tasks.Add(task);
+            await context.SaveChangesAsync();
+
+            // Act
+            var count = await repository.GetCompletedTasksCountInLastDaysAsync(userId, 1);
+
+            // Assert
+            count.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ShouldAddNewHistoryAndComments()
+        {
+            // Arrange
+            using var context = new ApplicationDbContext(_dbContextOptions);
+            var repository = new TaskRepository(context);
+            var projectId = Guid.NewGuid();
+            var task = new Core.Entities.Task("Task", "Desc", DateTime.UtcNow, Core.Enums.TaskPriority.Low, projectId);
+            context.Tasks.Add(task);
+            await context.SaveChangesAsync();
+
+            // Simula histórico e comentários
+            var history = new TaskHistory("Add new comment", task.Id, Guid.NewGuid());
+            var comment = new Comment("New comment", task.Id, Guid.NewGuid());
+
+            task.History.Add(history);
+            task.Comments.Add(comment);
+
+            // Act
+            await repository.UpdateAsync(task);
+
+            // Assert
+            var updatedHistory = await context.Set<TaskHistory>().FirstOrDefaultAsync(h => h.Id == history.Id);
+            var updatedComment = await context.Set<Comment>().FirstOrDefaultAsync(c => c.Id == comment.Id);
+
+            updatedHistory.Should().NotBeNull();
+            updatedComment.Should().NotBeNull();
         }
     }
 
@@ -328,7 +380,7 @@ namespace TaskZ.Tests.Tasks
         {
             // Arrange
             var projectId = Guid.NewGuid();
-            var tasks = new List<Core.Entities.Task> { new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(1), Core.Enums.TaskPriority.Medium, projectId) };
+            var tasks = new List<Core.Entities.Task> { new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(1), TaskPriority.Medium, projectId) };
             _mockTaskRepository.Setup(repo => repo.GetProjectTasksAsync(projectId)).ReturnsAsync(tasks);
 
             // Act
@@ -392,7 +444,7 @@ namespace TaskZ.Tests.Tasks
         {
             // Arrange
             var taskId = Guid.NewGuid();
-            var task = new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(5), Core.Enums.TaskPriority.Medium, Guid.NewGuid());
+            var task = new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(5), TaskPriority.Medium, Guid.NewGuid());
             _mockTaskRepository.Setup(repo => repo.GetByIdAsync(taskId)).ReturnsAsync(task);
             _mockTaskRepository.Setup(repo => repo.UpdateAsync(task)).Returns(Task.CompletedTask);
 
@@ -410,7 +462,7 @@ namespace TaskZ.Tests.Tasks
         {
             // Arrange
             var taskId = Guid.NewGuid();
-            var task = new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(5), Core.Enums.TaskPriority.Medium, Guid.NewGuid());
+            var task = new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(5), TaskPriority.Medium, Guid.NewGuid());
             _mockTaskRepository.Setup(repo => repo.GetByIdAsync(taskId)).ReturnsAsync(task);
             _mockTaskRepository.Setup(repo => repo.UpdateAsync(task)).Returns(Task.CompletedTask);
 
@@ -447,7 +499,7 @@ namespace TaskZ.Tests.Tasks
         {
             // Arrange
             var taskId = Guid.NewGuid();
-            var task = new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(5), Core.Enums.TaskPriority.Medium, Guid.NewGuid());
+            var task = new Core.Entities.Task("Test Task", "Description", DateTime.UtcNow.AddDays(5), TaskPriority.Medium, Guid.NewGuid());
             _mockTaskRepository.Setup(repo => repo.GetByIdAsync(taskId)).ReturnsAsync(task);
             _mockTaskRepository.Setup(repo => repo.DeleteAsync(task)).Returns(Task.CompletedTask);
 

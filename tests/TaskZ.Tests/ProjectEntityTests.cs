@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moq;
-using Xunit;
 using TaskZ.API.Controllers;
+using TaskZ.API.Models.Projects;
 using TaskZ.Core.Entities;
 using TaskZ.Core.Interfaces;
-using TaskZ.API.Models.Projects;
-using FluentAssertions;
-using TaskZ.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 using TaskZ.Infrastructure.Data;
+using TaskZ.Infrastructure.Repositories;
 using Task = System.Threading.Tasks.Task;
 
 namespace TaskZ.UnitTests.Controllers
