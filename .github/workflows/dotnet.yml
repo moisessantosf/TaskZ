@@ -1,0 +1,47 @@
+name: Build and Analyze with SonarQube
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Instalar .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restaurar dependências
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Testes
+        run: dotnet test --no-build --configuration Release
+
+      - name: Instalar SonarScanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Rodar SonarScanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet sonarscanner begin \
+            /k:"TaskZ" \
+            /d:sonar.login="$SONAR_TOKEN" \
+            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          
+          dotnet build --configuration Release
+
+          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
