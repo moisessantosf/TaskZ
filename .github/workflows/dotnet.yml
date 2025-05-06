@@ -1,4 +1,4 @@
-name: Build and Analyze with SonarQube
+name: Build and Analyze with SonarCloud
 
 on:
   push:
@@ -33,16 +33,20 @@ jobs:
       - name: Instalar SonarScanner
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - name: Rodar SonarScanner
+      - name: Rodar SonarScanner Begin
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           dotnet sonarscanner begin \
-            /k:"TaskZ" \
+            /k:"moisessantosf_TaskZ" \
+            /o:"moisessantosf" \
             /d:sonar.login="$SONAR_TOKEN" \
-            /d:sonar.host.url="$SONAR_HOST_URL"
-          
-          dotnet build --configuration Release
+            /d:sonar.host.url="https://sonarcloud.io"
 
-          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
+      - name: Build para análise
+        run: dotnet build --configuration Release
+
+      - name: Rodar SonarScanner End
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
