@@ -36,11 +36,12 @@ jobs:
       - name: Rodar SonarScanner
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           dotnet sonarscanner begin \
             /k:"TaskZ" \
             /d:sonar.login="$SONAR_TOKEN" \
-            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+            /d:sonar.host.url="$SONAR_HOST_URL"
           
           dotnet build --configuration Release
 
